@@ -1,7 +1,7 @@
 
-# ADS130B04 LIB
+# ADS130B04=Q1 LIB
 
-An ESP32 library for setting up and reading from TI's ADS130B04 four
+An ESP32 library for setting up and reading from TI's ADS130B04-Q1 four
 channel 16 bit Analog to Digital Converter.
 
 For platformio, add this to your platformio.ini file:
@@ -15,7 +15,7 @@ Then
 ```
 #include "ads130b04.h"
 
-ADS130B04 adc(ADC_CS_PIN, ADC_DATA_READY_PIN, 25000000);
+ADS130B04Q1 adc(ADC_CS_PIN, ADC_DATA_READY_PIN, 25000000);
 
 adc.enableChannels(true, false, true, false);
 

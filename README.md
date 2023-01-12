@@ -1,5 +1,5 @@
 
-# ADS130B04=Q1 LIB
+# ADS130B04-Q1 LIB
 
 An ESP32 library for setting up and reading from TI's ADS130B04-Q1 four
 channel 16 bit Analog to Digital Converter.

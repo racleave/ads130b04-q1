@@ -17,9 +17,15 @@ Then
 
 ADS130B04Q1 adc(ADC_CS_PIN, ADC_DATA_READY_PIN, 25000000);
 
+// Setup SPI.
+SPI.begin(SCLK_PIN, MISO_PIN, MOSI_PIN, ADC_CS_PIN);
+    
+// Start the adc at a certain frequency: 250, 500, 1000, 2000, 4000, 8000, 16000, 32000 Hz.
+adc.begin(500);
+  
 adc.enableChannels(true, false, true, false);
 
-int16_t data[4];
+int16_t data[4] = {0, 0, 0, 0};
 adc.read(data);
 
 
@@ -27,10 +33,6 @@ adc.read(data);
 
 ## To do
 
- - bring through changes done in other test_ads130b04/.pio/libdeps...
- 
- - document library functions
- 
  - update above snippet based on example
  
  - commit

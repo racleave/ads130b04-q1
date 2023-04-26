@@ -99,7 +99,7 @@ public:
   uint8_t enabledChannels = 0x0F;
   uint8_t osr = 0b111;
   uint8_t pwr = 0b10;
-  uint8_t extClock = 1;
+  uint8_t clkSel = 0;
   
   //SPISettings spiSettings;
 

@@ -56,12 +56,16 @@ int8_t ADS130B04Q1::begin(uint16_t _fs) {
   //  Serial.println("Something went wrong resetting!");
 
   result = wakeup();
+  Serial.print("Waking up: ");Serial.println(result);
+
 
   //if (standby() != 0)
   //  Serial.println("Something went wrong setting STANDBY!");
   //reset();
 
-  setSPS(_fs);
+  Serial.println("Setting SPS");
+  result = setSPS(_fs);
+  Serial.print("SPS set: ");Serial.println(result);
   
   Serial.println("Getting status");
   status();
@@ -92,7 +96,7 @@ int8_t ADS130B04Q1::setSPS(uint16_t sps)
   else if (sps == 4000) osr = 0b011;
   else if (sps == 2000) osr = 0b100;
   else if (sps == 1000) osr = 0b101;
-  else if (sps == 5000) osr = 0b110;
+  else if (sps == 500) osr = 0b110;
   else osr = 0b111; // 250 Hz
 
   return writeClockRegister();
@@ -127,6 +131,7 @@ int8_t ADS130B04Q1::setResolution(uint8_t res)
 */
 int8_t ADS130B04Q1::enableChannels(bool ch0, bool ch1, bool ch2, bool ch3) 
 {
+  
   byte channelMask = 0x00;
   if (ch0) channelMask |= 0b0001;
   if (ch1) channelMask |= 0b0010;
@@ -134,7 +139,7 @@ int8_t ADS130B04Q1::enableChannels(bool ch0, bool ch1, bool ch2, bool ch3)
   if (ch3) channelMask |= 0b1000;
   Serial.println(channelMask, BIN);
   enabledChannels = channelMask & 0x0F;
-  writeClockRegister();
+  return writeClockRegister();
 }
 
 /*! Set the channels that will be acquired. Not sure whether this
@@ -161,14 +166,22 @@ int8_t ADS130B04Q1::enableChannels(byte channelMask)
 int8_t ADS130B04Q1::writeClockRegister() 
 {
 
+  int8_t res = ADS130B04Q1_OK;
+  
   uint16_t clockRegData = (enabledChannels << 8)
-    | (extClock << 7) | (osr << 2) | pwr;
+    | (clkSel << 7) | (osr << 2) | pwr;
+  Serial.print("Setting clock reg: ");    Serial.println(clockRegData, BIN);
   
   // 0b0000110110011110
-  if (writeRegister(ADS130B04Q1_ADDR_CLOCK, clockRegData) == 0)
+  if (writeRegister(ADS130B04Q1_ADDR_CLOCK, clockRegData) == 0) {
     Serial.println("Clock has been set.");
-  else
+  }
+  else {
     Serial.println("Something went wrong writing to the clock register!");
+    res = ADS130B04Q1_ERROR;
+  }
+
+  return res;
 }
 
 
@@ -379,7 +392,7 @@ int8_t ADS130B04Q1::standby() {
 
 */
 int8_t ADS130B04Q1::wakeup() {
-  
+
   SPI.beginTransaction(SPISettings(spiFreq, MSBFIRST, SPI_MODE1));
   digitalWrite(chipSelectPin, LOW);
   SPI.transfer(0x00);

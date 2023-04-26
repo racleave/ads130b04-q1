@@ -25,10 +25,17 @@ adc.read(data);
 
 ```
 
+## To do
+
+ - bring through changes done in other test_ads130b04/.pio/libdeps...
+ 
+ - document library functions
+ 
+ - update above snippet based on example
+ 
+ - commit
+
 ## Status
 
-
  - reset is currently not working.
- 
- - still a fair bit of ironing out to do...
  

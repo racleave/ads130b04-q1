@@ -33,10 +33,6 @@ adc.read(data);
 
 ## To do
 
- - update above snippet based on example
- 
- - commit
-
 ## Status
 
  - reset is currently not working.
